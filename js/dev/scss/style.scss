@@ -1,0 +1,217 @@
+body {
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%), url("/js/assets/1.jpeg") center/cover no-repeat;
+	background-size: cover; 
+	/*background-size: auto 100vh;
+	background-position: 0 100%;*/
+	/*-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, 
+    from(rgba(255,255,255,0.5)), to(rgba(0,0,0,0)));
+		This applies the mask for all of the website including the text, which is unwanted
+		To make the opacity happen on an image -> make it applied in a shorthand notation, like so: 
+		linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%), url("js/assets/AftJea6MYEA.jpg") center/cover no-repeat
+	*/
+	mix-blend-mode: multiply;
+	width: 100vw;
+	height: 100vh;
+}
+
+.asana-light-box {
+	position: absolute;
+	background-color : #ccc;
+	border : 1px solid #000;
+	top: 25%;
+	bottom: 25%;
+	right: 25%;
+	left: 25%;
+	width : 50%;
+	height: 350px;
+}
+
+.asana-form {
+		width: 90%;
+		margin: 1% auto;
+		transform: translateY(5%);
+}
+
+div.asana-light-box div.asana-form textarea.asana-taskInput {
+		border : 1px dotted grey;
+		height: 200px;
+		width : 100%;
+		font-family: sans-serif;
+}
+div.asana-light-box div.asana-form textarea.asana-projectInput {
+		border : 1px dotted grey;
+		font-family: sans-serif;
+}
+
+.asana-projectInput::before {
+	content : "Choose your Project";
+}
+
+.asana-workspaceInput::before{
+	content : "Choose your Workspace";
+}
+
+.asana-projectInput select, .asana-workspaceInput select {
+	width : 100%; 
+}
+
+div.asana-light-box div.asana-form-exit {
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 100%), url("/js/assets/close.png") center/cover;
+	border-top-right-radius : 10px;
+	height: 25px;
+	position: absolute;
+	right: 0;
+	top: -4%;
+	transform: translateX(12px);
+	width: 25px;
+}
+
+div.asana-light-box div.asana-form-exit:hover {
+	cursor : pointer;
+}
+	
+body.background-position-interim {
+	transition: background-size 5s;
+	background-size: auto 100%;
+	animation-iteration-count: 1;
+	animation: imagebulger 4s;
+}
+
+@keyframes imagebulger {
+  0%, 100% {
+    background-size: 100% auto;
+    -webkit-background-size: 100%;
+  }
+  
+  25% {
+		background-size: 25% auto;
+		background-position: center top;
+		-webkit-background-size: 50%;
+  }
+  
+  50% {
+    background-size: 50% auto;
+	background-position: center center;
+    -webkit-background-size: 50%;
+  }
+  
+  75% {
+    background-size: 75% auto;
+	background-position: center bottom;
+    -webkit-background-size: 50%;
+  }
+}
+
+body.background-position {
+	transition: background-size 5s;
+	background-size: auto 100%;
+}
+
+button {
+	width : 33.3%;
+}
+
+/*galaxy mobile devices: phones, landscape*/
+/*iPhone 6*/
+
+button {
+		@media only screen and (min-device-width: 360px) and (max-device-height: 640px){
+			width : 100%;
+		}
+		
+		@media only screen and (min-device-width: 375px) and (max-device-height: 667px) {
+			width : 100%;
+		}
+}
+
+ol h3 {
+	font-weight : bold; 
+	color : #9A2617;
+}
+
+.file-list-wrapper {
+	height: 288px;
+	width: 90%;
+	overflow : auto;
+	margin: 0 auto;
+}
+
+textarea {
+	background : transparent;
+	width : 100%;
+}
+
+div[data-reactroot] > div textarea {
+	color : black;
+	border: 0;
+	resize: none;
+}
+
+th, td {
+	text-align : center;
+	width: 250px;
+	border: 1px solid #ccc;
+}
+
+tbody tr td:nth-child(1)._td_::before, tbody tr td:nth-child(2)._td_::before {
+	content : url(/js/assets/tick.png);	
+	margin: -1% 0 0 0;
+	position : absolute;
+}
+
+div.asana{
+	position : relative;
+}
+div.asana::before {
+	content : "  ";
+	height: 15px;
+	width : 15px;
+	position : absolute;
+	top : 0;
+	right : 0;
+	background: linear-gradient(to bottom, hsla(275, 2%, 58%, 0.8) 0%, rgba(132, 132, 138, 0.05) 100%), url(/js/assets/asana.png) center/cover no-repeat;
+}
+
+table {
+  width: 90%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+ 
+thead {
+	 display: table-header-group;
+	  
+} 
+
+div[data-reactroot]>div:nth-child(2){
+	padding-left: 10pt;
+}
+
+h6 {
+	color: #9A2617;
+}
+
+h1, h2 {
+	color: black;
+}
+
+img{
+	width: 50%;
+}
+
+.detail-selected, .detail-selected * {
+	color : red!important;
+}
+
+li{
+	text-align: justify;
+	margin: 0 0 15px;
+	color: #9A2617;
+}
+
+li:hover{
+	color : #3c6478;
+	cursor: pointer;
+	text-align: left;
+}

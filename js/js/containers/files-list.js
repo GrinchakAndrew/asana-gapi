@@ -12,7 +12,9 @@ import {getGapiLoggedInUser} from '../actions/index';
 import {getConfigAsanaInstance} from '../actions/index';
 import {getCommentsFromDataBaseFile} from '../actions/index';
 import reactTable from '../containers/react-table';
-import matchSorter from 'match-sorter'
+import matchSorter from 'match-sorter';
+import Asana from 'asana';
+
 /*
 used to be: 
 import api from '../libs/api.js';
@@ -28,8 +30,52 @@ class Filelist extends Component {
 			CLIENT_ID : '693461940941-fcvioeadonbn755fdo56aqkhd4ooe163.apps.googleusercontent.com', 
 			DISCOVERY_DOCS : ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest", 'https://sheets.googleapis.com/$discovery/rest?version=v4'],
 			SCOPES : 'https://www.googleapis.com/auth/drive', 
-			filelist : null,
-			configAsana: (function() {
+			filelist : null, 
+			token : null,
+			configAsana : null
+		};
+	};
+	componentDidMount() {
+		/*google api code begins here: 
+			https://console.developers.google.com/flows/enableapi?apiid=drive&authuser=1
+			When gapi failes to load with 404: double-check and verify you locally have the latest script 
+			from https://apis.google.com/js/client.js?onload=checkAuth
+			and also: when the 'this' object is referred to, from the locally saved file, need to change the this to 'window' to avoid the error : 'this.navigator' is undefined.
+		*/
+		
+		/*---------------------------------------------------------------*/
+					var client = Asana.Client.create({
+						  clientId: 377285758834264,
+						  clientSecret: '6fd0ffb3dddc73cc88c2e89368c1ee6f',
+						  redirectUri: 'https://localhost:3000/redirect.html'
+						});
+						client.useOauth({
+							flowType: Asana.auth.PopupFlow
+						});
+						client.authorize();
+						window.addEventListener('message', (event) => {
+							if(event && event.origin == "https://localhost:3000" && event.data && typeof event.data == 'string') {
+							this.setState({token : event.data});
+							console.log( "токен : " + event.data);
+							}
+						});
+		/*---------------------------------------------------------------*/
+
+		console.log('gapiScript component did mount');
+		const gapiScript = document.createElement('script');
+		gapiScript.src = 'https://apis.google.com/js/api.js?onload=onGapiLoad';
+		var onGapiLoad = function () {
+			gapi.load('client:auth2', this.initClient.bind(this));
+		}
+		window.onGapiLoad = onGapiLoad.bind(this);
+		document.body.appendChild(gapiScript);
+	}
+		
+	componentWillUpdate(nextProps, nextState) {
+		console.log(nextState, 'nextState');
+		if(nextState.token && typeof nextState.token == 'string' && !this.state.token){
+			this.setState({
+			configAsana : (function(_this) {
 				var config = {
 					users: [],
 					usersRequests: [],
@@ -137,31 +183,17 @@ class Filelist extends Component {
 						};
 					})()
 				};
-				return {asanaApi : new config.Asana({api_key: '0/e2139de5044c43d9aa22f4c24735fe25'}), 
+				return {asanaApi : new config.Asana({token : nextState.token}),
 				        eventManager : config.eventManager, 
 						offset : config.offset
-					} ;
-			})()
-			
-		};
-	};
-	componentDidMount() {
-		/*google api code begins here: 
-			https://console.developers.google.com/flows/enableapi?apiid=drive&authuser=1
-			When gapi failes to load with 404: double-check and verify you locally have the latest script 
-			from https://apis.google.com/js/client.js?onload=checkAuth
-			and also: when the 'this' object is referred to, from the locally saved file, need to change the this to 'window' to avoid the error : 'this.navigator' is undefined.
-		*/
-		let _configAsanaClonedObject = Object.assign({}, this.state.configAsana);
-		this.props.getConfigAsanaInstance(_configAsanaClonedObject);
-		console.log('gapiScript component did mount');
-		const gapiScript = document.createElement('script');
-		gapiScript.src = 'https://apis.google.com/js/api.js?onload=onGapiLoad';
-		var onGapiLoad = function () {
-			gapi.load('client:auth2', this.initClient.bind(this));
+					};
+			})(this)	
+		});
 		}
-		window.onGapiLoad = onGapiLoad.bind(this);
-		document.body.appendChild(gapiScript);
+	}
+	
+    componentDidUpdate(prevProps, prevState){
+		if(this.state.token && this.state.configAsana && !prevState.configAsana){
 		this.state.configAsana.eventManager.on('header-component-triggered-click-on-projects-status-update', function(){
 			var projectStatusUpdateFile = this.props.filelist.filter(function(i, j){
 			   if(i['name'] == 'Projects Status Update'){
@@ -198,14 +230,16 @@ class Filelist extends Component {
 			
 			this.props.getClickedFileId({clickedFileName : clickedFileName, fileId : fileId});
 			this.exportFile(fileId);
-			
-			
 		}.bind(this));
 		
-	}
+		let _configAsanaClonedObject = Object.assign({}, this.state.configAsana);
+		this.props.getConfigAsanaInstance(_configAsanaClonedObject);
+		
+		}
+	 }
 	
 	componentWillReceiveProps(nextProps) {
-		this.setState({filelist : nextProps.filelist})
+		this.setState({filelist : nextProps.filelist});
 		/* console.log(this.props.configAsanaInstanceReducer.eventManager, "this.props.configAsanaInstanceReducer.eventManager"); */
 	}
 	

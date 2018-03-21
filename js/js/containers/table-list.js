@@ -132,8 +132,8 @@ var alphabet = ['A','B','C','D','E','E','G','H','I','J','K','L','M','N','O','P',
 		}.bind(this));
 	}
 	
-	componentWillReceiveProps(nextProps){
-		if(nextProps.isAsanaBoolean || nextProps.asanaReducer){
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.isAsanaBoolean || nextProps.asanaReducer) {
 			this.state.asanaTaskText = nextProps.asanaReducer;
 			this.state.isAsana = nextProps.isAsanaBoolean;
 		  /* 

@@ -53,7 +53,7 @@ class AsanaLightBox extends Component {
 					let asanaTaskText = arguments[4];
 					let allProjects = arguments[5];
 					let allWorkspaces = arguments[6];
-					let assignee = "andrewgrinchak@gmail.com";
+					/* let assignee = "andrewgrinchak@gmail.com"; */
 					let workspaceId = allWorkspaces.data.filter(function(i, j){
 								if(i.name == selectedWorkspaceOption){
 								   return true;
@@ -69,7 +69,7 @@ class AsanaLightBox extends Component {
 					obj.data["workspace"] = workspaceId;
 					obj.data["projects"] = [projectId];
 					obj.data["name"] = asanaTaskText;
-					obj.data["assignee"] = assignee;
+					/* obj.data["assignee"] = assignee; */
 					requestFn.apply(asanaApi, ["POST", "tasks", function(response) {
 					  if (response.errors) {
 						  alert("Error:" + response.errors[0].message);
